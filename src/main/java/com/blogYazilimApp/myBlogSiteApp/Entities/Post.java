@@ -17,10 +17,10 @@ public class Post {
     Long id;
 
 
-    @ManyToOne(fetch =  FetchType.LAZY) // Sadece gerekli veri gelecek.
+    @ManyToOne(fetch =  FetchType.EAGER) // PostResponse'a mapleyebilmemiz için EAGER olarak tanımladık.
+                                         // Çünkü bize gerekli user'ın ismi gerekiyor
     @JoinColumn(name = "user_id",nullable = false) // user tablosundan id sütununu çekiyoruz.
     @OnDelete(action = OnDeleteAction.CASCADE) // eğer user silinirse user a bağlı tüm postlar silinecek.
-    @JsonIgnore
     User user;
 
     String title;

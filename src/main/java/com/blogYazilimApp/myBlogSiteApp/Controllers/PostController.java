@@ -4,9 +4,9 @@ package com.blogYazilimApp.myBlogSiteApp.Controllers;
 import com.blogYazilimApp.myBlogSiteApp.Entities.Post;
 import com.blogYazilimApp.myBlogSiteApp.Requests.PostCreateRequest;
 import com.blogYazilimApp.myBlogSiteApp.Requests.PostUpdateRequest;
+import com.blogYazilimApp.myBlogSiteApp.Responses.PostResponse;
 import com.blogYazilimApp.myBlogSiteApp.Services.PostService;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +22,7 @@ public class PostController {
     }
 
     @GetMapping
-    public List<Post> getAllPosts(@RequestParam Optional<Long> userId){
+    public List<PostResponse> getAllPosts(@RequestParam Optional<Long> userId){
         return postService.getAllPosts(userId);
     }
 

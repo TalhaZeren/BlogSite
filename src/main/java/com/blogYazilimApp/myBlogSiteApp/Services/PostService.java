@@ -5,11 +5,13 @@ import com.blogYazilimApp.myBlogSiteApp.Entities.User;
 import com.blogYazilimApp.myBlogSiteApp.Repositories.PostRepository;
 import com.blogYazilimApp.myBlogSiteApp.Requests.PostCreateRequest;
 import com.blogYazilimApp.myBlogSiteApp.Requests.PostUpdateRequest;
+import com.blogYazilimApp.myBlogSiteApp.Responses.PostResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -17,21 +19,21 @@ public class PostService {
     PostRepository postRepository;
     UserService userService;
 
-
     public PostService(PostRepository postRepository,UserService userService){
         this.postRepository = postRepository;
         this.userService = userService;
     }
 
-    public List<Post> getAllPosts(Optional<Long> userId) { // Eğer userId mevcutsa ilgili user a ait postlar gelecek.
+    public List<PostResponse> getAllPosts(Optional<Long> userId) { // Eğer userId mevcutsa ilgili user a ait postlar gelecek.
+            List<Post> list;
         if (userId.isPresent()){
-            return postRepository.findByUserId(Optional.of(userId.get()));
+            list =  postRepository.findByUserId(Optional.of(userId.get()));
         }
         else {
-            return postRepository.findAll();
+            list = postRepository.findAll();
         }
+        return list.stream().map(p -> new PostResponse(p)).collect(Collectors.toList());
     }
-
     public Post getOnePostById(Long postId) {
         return postRepository.findById(postId).orElse(null);
     }
