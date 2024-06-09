@@ -2,6 +2,7 @@ package com.blogYazilimApp.myBlogSiteApp.Controllers;
 
 import com.blogYazilimApp.myBlogSiteApp.Entities.Like;
 import com.blogYazilimApp.myBlogSiteApp.Requests.LikeCreateRequest;
+import com.blogYazilimApp.myBlogSiteApp.Responses.LikeResponse;
 import com.blogYazilimApp.myBlogSiteApp.Services.LikeService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -18,7 +19,7 @@ public class LikeController {
     }
 
     @GetMapping
-    public List<Like> getAllLikes(@RequestParam Optional<Long> postId,@RequestParam Optional<Long> userId){
+    public List<LikeResponse> getAllLikes(@RequestParam Optional<Long> postId, @RequestParam Optional<Long> userId){
         return likeService.getAllLikes(postId,userId);
     }
 
@@ -34,7 +35,7 @@ public class LikeController {
 
 
     @DeleteMapping("/{likeId}")
-    public String deleteLike(@PathVariable Long likeId){
-        return likeService.deleteLike(likeId);
+    public void deleteLike(@PathVariable Long likeId){
+         likeService.deleteLike(likeId);
     }
 }

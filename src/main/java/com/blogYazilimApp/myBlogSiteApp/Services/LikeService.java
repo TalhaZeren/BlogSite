@@ -7,9 +7,11 @@ import com.blogYazilimApp.myBlogSiteApp.Repositories.LikeRepository;
 import com.blogYazilimApp.myBlogSiteApp.Repositories.PostRepository;
 import com.blogYazilimApp.myBlogSiteApp.Repositories.UserRepository;
 import com.blogYazilimApp.myBlogSiteApp.Requests.LikeCreateRequest;
+import com.blogYazilimApp.myBlogSiteApp.Responses.LikeResponse;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class LikeService {
@@ -25,17 +27,19 @@ public class LikeService {
     }
 
 
-    public List<Like> getAllLikes(Optional<Long> postId, Optional<Long> userId) {
+    public List<LikeResponse> getAllLikes(Optional<Long> postId, Optional<Long> userId) {
+        List<Like> list;
         if(postId.isPresent() && userId.isPresent()){
-            return likeRepository.findByPostIdAndUserId(postId,userId);
+            list = likeRepository.findByPostIdAndUserId(Optional.of(postId.get()), Optional.of(userId.get()));
         } else if (postId.isPresent()) {
-            return likeRepository.findByPostId(postId);
+            list = likeRepository.findByPostId(Optional.of(postId.get()));
         } else if (userId.isPresent()) {
-            return likeRepository.findByUserId(userId);
+            list = likeRepository.findByUserId(Optional.of(userId.get()));
         }
-        else{
-            return null;
+        else {
+            list = likeRepository.findAll();
         }
+        return list.stream().map(like -> new LikeResponse(like)).collect(Collectors.toList());
     }
 
     public Optional<Like> getOneLike(Long likeId) {
