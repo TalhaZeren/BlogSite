@@ -181,7 +181,6 @@ function PostForm(props) {
             aria-expanded={expanded}
             aria-label="show more"
           >
-           
           </Expand>
         </CardActions>
         <Collapse in={expanded} timeout="auto" unmountOnExit>

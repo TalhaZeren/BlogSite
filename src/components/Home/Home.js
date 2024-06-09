@@ -1,13 +1,10 @@
 import Post from "../Post/Post";
 import React, { useState, useEffect } from "react";
-
 import Container from '@mui/material/Container';
 import { styled } from '@mui/system';  
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import PostForm from "../Post/PostForm";
-
-// Home actually parent component. Post is a child component
 
 const CustomContainer = styled(Container)(({ theme }) => ({
   justifyContent: "center",
@@ -25,16 +22,16 @@ function Home() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [postList, setPostList] = useState([]);
 
-
-    const refreshPost = () => {
-      fetch("/posts")
+  const refreshPost = () => {
+    fetch("/posts")
       .then(res => res.json())
       .then(
         (result) => {
           setTimeout(() => {
             setIsLoaded(true);
-            setPostList(result);
-          }, 1000); // 2 saniyelik gecikme
+            console.log("API Response:", result); // Hata ayıklama için
+            setPostList(Array.isArray(result) ? result : []); // Gelen sonucun bir dizi olup olmadığını kontrol et
+          }, 1000); // 1 saniyelik gecikme
         },
         (error) => {
           setTimeout(() => {
@@ -43,11 +40,11 @@ function Home() {
           }, 2000); // 2 saniyelik gecikme
         }
       )
-    }
+  }
 
   useEffect(() => {
     refreshPost();
-  }, [postList]);
+  }, [postList]); // Sadece bileşen yüklendiğinde çağır
 
   if (error) {
     return <div>Error!</div>;
@@ -60,11 +57,10 @@ function Home() {
   } else {
     return (
       <CustomContainer>
-          <PostForm userId = {6} userName ={"Talha Zeren"} refreshPost = {refreshPost}/>
+        <PostForm userId={6} userName={"Talha Zeren"} refreshPost={refreshPost} />
         {postList.map(post => (
-          <Post postId={post.id} title={post.title} text={post.text} userName ={post.userName} userId = {post.userId}>
-          </Post>
-          
+          <Post key={post.id} likes={post.postLikes} postId={post.id} userName={post.userName} 
+          userId={post.userId} title={post.title} text={post.text} />
         ))}
       </CustomContainer>
     );
